@@ -1,0 +1,2 @@
+FROM --platform=linux/%%BALENA_ARCH%% nginx
+COPY Project /usr/share/nginx/html

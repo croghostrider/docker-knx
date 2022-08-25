@@ -1,0 +1,36 @@
+version: '2'
+volumes:
+    influxdb-data:
+    nodered-data:
+    grafana-data:
+services:
+  nodered:
+    network_mode: host
+    restart: always
+    build: ./nodered
+    environment:
+      - TZ=Europe/Amsterdam
+    volumes:
+      - 'nodered-data:/data'
+  influxdb:
+    network_mode: host
+    restart: always
+    build: ./influxdb
+    environment:
+      - INFLUXDB_DB=ming_default
+    volumes:
+      - 'influxdb-data:/data'
+  grafana:
+    network_mode: host
+    restart: always
+    build: ./grafana
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+    ports:
+      - "3000:3000"
+    volumes:
+      - 'grafana-data:/data'
+    depends_on:
+      - influxdb
+
